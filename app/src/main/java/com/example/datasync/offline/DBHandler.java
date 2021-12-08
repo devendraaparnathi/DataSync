@@ -57,7 +57,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursorCourses.moveToFirst()) {
             do {
-                sqLiteModelClassArrayList.add(new SQLiteModelClass(cursorCourses.getString(0), cursorCourses.getString(1), cursorCourses.getString(2)));
+                sqLiteModelClassArrayList.add(new SQLiteModelClass(cursorCourses.getString(1), cursorCourses.getString(2), cursorCourses.getString(3)));
             } while (cursorCourses.moveToNext());
         }
 

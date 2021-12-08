@@ -3,12 +3,14 @@ package com.example.datasync.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.datasync.R;
@@ -25,6 +27,7 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
     public UserLIstAdapter(ArrayList<SQLiteModelClass> sqLiteModelClassArrayList, Context context) {
         this.sqLiteModelClassArrayList = sqLiteModelClassArrayList;
         this.context = context;
+
     }
 
     @NonNull
@@ -43,6 +46,13 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
         holder.tvlNumber.setText(modelClass.getNumber());
         holder.tvlEmail.setText(modelClass.getEmail());
 
+        //Log.d("DEVENDRA", "getItemCount: " + sqLiteModelClassArrayList.size());
+
+        int ItemCount = sqLiteModelClassArrayList.size();
+        Intent intent = new Intent("PRIMARY");
+        intent.putExtra("SIZE",ItemCount);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +70,9 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
 
     @Override
     public int getItemCount() {
+
+        //Log.d("DEVENDRA", "getItemCount: " + sqLiteModelClassArrayList.size());
+
         return sqLiteModelClassArrayList.size();
     }
 
@@ -73,7 +86,7 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
             tvlName = itemView.findViewById(R.id.tvlName);
             tvlNumber = itemView.findViewById(R.id.tvlNumber);
             tvlEmail = itemView.findViewById(R.id.tvlEmail);
-
         }
     }
+
 }
