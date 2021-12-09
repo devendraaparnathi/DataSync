@@ -1,5 +1,6 @@
 package com.example.datasync.Api;
 
+import com.example.datasync.Pojo.SQLitePojo;
 import com.example.datasync.Pojo.UserDataPojo;
 
 import java.util.ArrayList;
@@ -16,5 +17,9 @@ public interface ApiInterface {
 
     @POST("saveData")
     Call<UserDataPojo>createUser(@Body UserDataPojo userDataPojo);
+
+    @POST("saveList")
+    Call<SQLitePojo> postData(@Body SQLitePojo sqLitePojo);
+
 
 }

@@ -38,10 +38,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
 
     private IntentFilter intentFilter;
 
+    public boolean isConnected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d("PRABHUDHAN", " CREATE: " + isConnected);
 
         etName = findViewById(R.id.etName);
         etNumber = findViewById(R.id.etNumber);
@@ -74,8 +78,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
 
                 checkConnection();
 
-                createUserData(etName.getText().toString(), etNumber.getText().toString(), etEmail.getText().toString());
-
                 String name = etName.getText().toString();
                 String number = etNumber.getText().toString();
                 String email = etEmail.getText().toString();
@@ -85,9 +87,16 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
                     return;
                 }
 
-                dbHandler.addNewUSer(name, number, email);
+                Log.d("PRABHUDHAN", " CLICK: " + isConnected);
 
-                Toast.makeText(MainActivity.this, "Add Successfully", Toast.LENGTH_SHORT).show();
+                if (isConnected)
+                {
+                    createUserData(etName.getText().toString(), etNumber.getText().toString(), etEmail.getText().toString());
+                }else
+                {
+                    dbHandler.addNewUSer(name, number, email);
+                    Toast.makeText(MainActivity.this, "Data Store Locally", Toast.LENGTH_SHORT).show();
+                }
 
                 etName.setText("");
                 etEmail.setText("");
@@ -107,15 +116,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
         call.enqueue(new Callback<UserDataPojo>() {
             @Override
             public void onResponse(Call<UserDataPojo> call, Response<UserDataPojo> response) {
-                UserDataPojo responsePojo = response.body();
-                Log.d("TAGE", "onResponse: " + responsePojo.getContactName());
-                Log.d("TAGE", "onResponse: " + responsePojo.getMobileNo());
-                Log.d("TAGE", "onResponse: " + responsePojo.getEmailId());
+
+                Toast.makeText(MainActivity.this, "Added Successfully", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onFailure(Call<UserDataPojo> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Please connect with Network", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -129,8 +137,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
         ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-        boolean isConnected = networkInfo != null && networkInfo.isConnectedOrConnecting();
+        isConnected = networkInfo != null && networkInfo.isConnectedOrConnecting();
         showSnackBar(isConnected);
+
+        Log.d("PRABHUDHAN", " INMETHOD: " + isConnected);
 
     }
 
@@ -140,9 +150,15 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
         int color;
 
         if (isConnected) {
+
+            Log.d("PRABHUDHAN", " MESSAGE: " + isConnected);
+
             message = "Internet Available";
             color = Color.WHITE;
         } else {
+
+            Log.d("PRABHUDHAN", " MESSAGE: " + isConnected);
+
             message = "Network not Available";
             color = Color.RED;
         }
@@ -156,18 +172,27 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
 
     @Override
     public void onNetworkChange(boolean isConnected) {
+
+        Log.d("PRABHUDHAN", " NETWORK_CHANGE: " + isConnected);
+
         showSnackBar(isConnected);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        Log.d("PRABHUDHAN", " ONRESUME: " + isConnected);
+
         checkConnection();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+        Log.d("PRABHUDHAN", " ONPAUSE: " + isConnected);
+
         checkConnection();
     }
 }

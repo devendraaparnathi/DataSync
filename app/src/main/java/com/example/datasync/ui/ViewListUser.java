@@ -28,6 +28,7 @@ public class ViewListUser extends AppCompatActivity {
     private UserLIstAdapter userLIstAdapter;
     private RecyclerView rvListUser;
     private int size = 0;
+    private String name,number,email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class ViewListUser extends AppCompatActivity {
         setContentView(R.layout.activity_view_list_user);
 
         LocalBroadcastManager.getInstance(this).
-        registerReceiver(broadcastReceiver,new IntentFilter("PRIMARY"));
+        registerReceiver(broadcastReceiver,new IntentFilter("Message"));
 
         rvListUser = findViewById(R.id.rvListUser);
 
@@ -56,8 +57,10 @@ public class ViewListUser extends AppCompatActivity {
     public BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            size = intent.getIntExtra("SIZE",0);
-            Log.d("DEVENDRA", "onReceive: " + size);
+
+            name= intent.getStringExtra("mName");
+            number= intent.getStringExtra("mNumber");
+            email= intent.getStringExtra("mEmail");
 
         }
     };

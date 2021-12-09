@@ -3,6 +3,7 @@ package com.example.datasync.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,17 @@ import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.datasync.Api.ApiClient;
+import com.example.datasync.Api.ApiInterface;
+import com.example.datasync.Pojo.SQLitePojo;
+import com.example.datasync.Pojo.UserDataPojo;
 import com.example.datasync.R;
 import com.example.datasync.model.SQLiteModelClass;
 import com.example.datasync.ui.UpdateDetails;
+import com.example.datasync.ui.ViewListUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHolder> {
 
@@ -27,7 +34,6 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
     public UserLIstAdapter(ArrayList<SQLiteModelClass> sqLiteModelClassArrayList, Context context) {
         this.sqLiteModelClassArrayList = sqLiteModelClassArrayList;
         this.context = context;
-
     }
 
     @NonNull
@@ -46,15 +52,21 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
         holder.tvlNumber.setText(modelClass.getNumber());
         holder.tvlEmail.setText(modelClass.getEmail());
 
-        int ItemCount = sqLiteModelClassArrayList.size();
-        Intent intent = new Intent("PRIMARY");
-        intent.putExtra("SIZE",ItemCount);
+        String cName = modelClass.getName();
+        String cNumber = modelClass.getNumber();
+        String cEmail = modelClass.getEmail();
+
+        Intent intent = new Intent("Message");
+        intent.putExtra("mName",cName);
+        intent.putExtra("mNumber",cNumber);
+        intent.putExtra("mEmail",cEmail);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+    //    uploadData(modelClass.getName().toString(),modelClass.getNumber().toString(),modelClass.getEmail().toString());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent i = new Intent(v.getContext(), UpdateDetails.class);
 
                 i.putExtra("name", modelClass.getName());
