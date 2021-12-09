@@ -50,7 +50,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="10dp"
             >
 
             <Button
@@ -70,7 +69,17 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="10dp"
                 android:layout_weight="1"
-                android:text="Data List"
+                android:text="Offline"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnCloud"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
+                android:layout_weight="1"
+                android:text="Cloud"
                 android:textAllCaps="false" />
 
         </LinearLayout>

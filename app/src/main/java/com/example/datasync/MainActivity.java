@@ -17,8 +17,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.datasync.Api.ApiClient;
 import com.example.datasync.Api.ApiInterface;
+import com.example.datasync.Pojo.UserDataPojo;
 import com.example.datasync.offline.DBHandler;
+import com.example.datasync.ui.SyncDataList;
 import com.example.datasync.ui.ViewListUser;
 import com.example.datasync.util.ConnectionReceiver;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,13 +29,11 @@ import com.google.android.material.snackbar.Snackbar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements ConnectionReceiver.ReceiverListener {
 
     private EditText etName, etNumber, etEmail;
-    private Button btnAdd, btnListData;
+    private Button btnAdd, btnListData, btnCloud;
     private DBHandler dbHandler;
 
     private IntentFilter intentFilter;
@@ -42,16 +43,22 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkConnection();
-
         etName = findViewById(R.id.etName);
         etNumber = findViewById(R.id.etNumber);
         etEmail = findViewById(R.id.etEmail);
         btnListData = findViewById(R.id.btnListData);
+        btnCloud = findViewById(R.id.btnCloud);
 
         btnAdd = findViewById(R.id.btnAdd);
 
         dbHandler = new DBHandler(MainActivity.this);
+
+        btnCloud.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SyncDataList.class));
+            }
+        });
 
         btnListData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                checkConnection();
 
                 createUserData(etName.getText().toString(), etNumber.getText().toString(), etEmail.getText().toString());
 
@@ -89,13 +98,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
 
     private void createUserData(String contactName, String mobileNo, String emailId) {
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.2.3:8080/contacts/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        ApiInterface retrofitAPI = ApiClient.getRetrofit().create(ApiInterface.class);
 
-        ApiInterface retrofitAPI = retrofit.create(ApiInterface.class);
         UserDataPojo pojo = new UserDataPojo(null, contactName, mobileNo, emailId);
+
         Call<UserDataPojo> call = retrofitAPI.createUser(pojo);
 
         call.enqueue(new Callback<UserDataPojo>() {

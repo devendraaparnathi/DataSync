@@ -46,8 +46,6 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
         holder.tvlNumber.setText(modelClass.getNumber());
         holder.tvlEmail.setText(modelClass.getEmail());
 
-        //Log.d("DEVENDRA", "getItemCount: " + sqLiteModelClassArrayList.size());
-
         int ItemCount = sqLiteModelClassArrayList.size();
         Intent intent = new Intent("PRIMARY");
         intent.putExtra("SIZE",ItemCount);
@@ -70,9 +68,6 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-
-        //Log.d("DEVENDRA", "getItemCount: " + sqLiteModelClassArrayList.size());
-
         return sqLiteModelClassArrayList.size();
     }
 

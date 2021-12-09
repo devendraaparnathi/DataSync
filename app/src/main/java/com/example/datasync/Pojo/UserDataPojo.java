@@ -1,4 +1,4 @@
-package com.example.datasync;
+package com.example.datasync.Pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
