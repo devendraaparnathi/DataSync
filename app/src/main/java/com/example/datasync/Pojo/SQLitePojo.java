@@ -24,7 +24,6 @@ public class SQLitePojo {
     }
 
 
-
     public class Contact {
 
         @SerializedName("contactName")

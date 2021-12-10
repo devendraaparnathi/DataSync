@@ -62,8 +62,6 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
         intent.putExtra("mEmail",cEmail);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
-    //    uploadData(modelClass.getName().toString(),modelClass.getNumber().toString(),modelClass.getEmail().toString());
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,5 +93,4 @@ public class UserLIstAdapter extends RecyclerView.Adapter<UserLIstAdapter.ViewHo
             tvlEmail = itemView.findViewById(R.id.tvlEmail);
         }
     }
-
 }

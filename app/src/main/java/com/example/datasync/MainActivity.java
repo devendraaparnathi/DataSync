@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d("PRABHUDHAN", " CREATE: " + isConnected);
-
         etName = findViewById(R.id.etName);
         etNumber = findViewById(R.id.etNumber);
         etEmail = findViewById(R.id.etEmail);
@@ -87,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
                     return;
                 }
 
-                Log.d("PRABHUDHAN", " CLICK: " + isConnected);
-
                 if (isConnected)
                 {
                     createUserData(etName.getText().toString(), etNumber.getText().toString(), etEmail.getText().toString());
@@ -116,9 +112,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
         call.enqueue(new Callback<UserDataPojo>() {
             @Override
             public void onResponse(Call<UserDataPojo> call, Response<UserDataPojo> response) {
-
-                Toast.makeText(MainActivity.this, "Added Successfully", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(MainActivity.this, "Successfully Added to server", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -140,8 +134,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
         isConnected = networkInfo != null && networkInfo.isConnectedOrConnecting();
         showSnackBar(isConnected);
 
-        Log.d("PRABHUDHAN", " INMETHOD: " + isConnected);
-
     }
 
     private void showSnackBar(boolean isConnected) {
@@ -150,15 +142,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
         int color;
 
         if (isConnected) {
-
-            Log.d("PRABHUDHAN", " MESSAGE: " + isConnected);
-
             message = "Internet Available";
             color = Color.WHITE;
         } else {
-
-            Log.d("PRABHUDHAN", " MESSAGE: " + isConnected);
-
             message = "Network not Available";
             color = Color.RED;
         }
@@ -172,27 +158,18 @@ public class MainActivity extends AppCompatActivity implements ConnectionReceive
 
     @Override
     public void onNetworkChange(boolean isConnected) {
-
-        Log.d("PRABHUDHAN", " NETWORK_CHANGE: " + isConnected);
-
         showSnackBar(isConnected);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        Log.d("PRABHUDHAN", " ONRESUME: " + isConnected);
-
         checkConnection();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        Log.d("PRABHUDHAN", " ONPAUSE: " + isConnected);
-
         checkConnection();
     }
 }
