@@ -2,14 +2,11 @@ package com.example.datasync.Api;
 
 import com.example.datasync.Pojo.SQLitePojo;
 import com.example.datasync.Pojo.UserDataPojo;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.example.datasync.model.MainModel;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -17,12 +14,12 @@ import retrofit2.http.POST;
 public interface ApiInterface {
 
     @GET("getData")
-    Call<ArrayList<UserDataPojo>>getDataList();
+    Call<ArrayList<UserDataPojo>> getDataList();
 
     @POST("saveData")
-    Call<UserDataPojo>createUser(@Body UserDataPojo userDataPojo);
+    Call<UserDataPojo> createUser(@Body UserDataPojo userDataPojo);
 
     @POST("saveList")
-    Call<SQLitePojo> postData(@Body JSONObject jsonObject);
+    Call<MainModel> postAllData(@Body MainModel mainModel);
 
 }

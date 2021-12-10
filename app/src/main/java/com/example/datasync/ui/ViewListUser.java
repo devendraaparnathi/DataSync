@@ -1,5 +1,6 @@
 package com.example.datasync.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,8 @@ import com.example.datasync.Api.ApiInterface;
 import com.example.datasync.Pojo.SQLitePojo;
 import com.example.datasync.R;
 import com.example.datasync.adapter.UserLIstAdapter;
+import com.example.datasync.model.MainModel;
+import com.example.datasync.model.ModelContact;
 import com.example.datasync.model.SQLiteModelClass;
 import com.example.datasync.offline.DBHandler;
 
@@ -28,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,22 +43,27 @@ public class ViewListUser extends AppCompatActivity {
     private DBHandler dbHandler;
     private UserLIstAdapter userLIstAdapter;
     private RecyclerView rvListUser;
-    private int size = 0;
-    private String name,number,email;
+    private String name, number, email;
 
     private Button btnSync;
+    MainModel mainModel;
+    ArrayList<ModelContact> modelContacts;
+    ModelContact modelContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_list_user);
 
+        modelContacts = new ArrayList<>();
+
         LocalBroadcastManager.getInstance(this).
-                registerReceiver(broadcastReceiver,new IntentFilter("Message"));
+                registerReceiver(broadcastReceiver, new IntentFilter("Message"));
 
         rvListUser = findViewById(R.id.rvListUser);
 
         sqLiteModelClassArrayList = new ArrayList<>();
+
         dbHandler = new DBHandler(ViewListUser.this);
 
         sqLiteModelClassArrayList = dbHandler.readDetails();
@@ -62,6 +71,15 @@ public class ViewListUser extends AppCompatActivity {
         userLIstAdapter = new UserLIstAdapter(sqLiteModelClassArrayList, null);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ViewListUser.this, RecyclerView.VERTICAL, false);
+
+        for (int i = 0; i < sqLiteModelClassArrayList.size(); i++) {
+            modelContact = new ModelContact(sqLiteModelClassArrayList.get(i).getName(), sqLiteModelClassArrayList.get(i).getEmail(), sqLiteModelClassArrayList.get(i).getNumber());
+            modelContacts.add(modelContact);
+
+        }
+
+        mainModel = new MainModel();
+        mainModel.setContactList(modelContacts);
 
         rvListUser.setLayoutManager(linearLayoutManager);
         rvListUser.setAdapter(userLIstAdapter);
@@ -72,24 +90,49 @@ public class ViewListUser extends AppCompatActivity {
             public void onClick(View v) {
                 ApiInterface retrofitAPI = ApiClient.getRetrofit().create(ApiInterface.class);
 
-                try {
+                Call<MainModel> passAllData = retrofitAPI.postAllData(mainModel);
+                passAllData.enqueue(new Callback<MainModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<MainModel> call, @NonNull Response<MainModel> response) {
+                        Toast.makeText(ViewListUser.this, "Data Added", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<MainModel> call, @NonNull Throwable t) {
+                        Toast.makeText(ViewListUser.this, "Connect to network", Toast.LENGTH_SHORT).show();
+                        dbHandler.deleteDetails(name);
+                    }
+                });
+
+                /*try {
+
                     JSONObject paramObj = new JSONObject();
-                    paramObj.put("contactName",name);
-                    paramObj.put("emailId",email);
-                    paramObj.put("mobileNo",number);
+
+                    paramObj.put("contactName", name);
+                    paramObj.put("emailId", email);
+                    paramObj.put("mobileNo", number);
 
                     JSONArray jsonArray = new JSONArray();
                     jsonArray.put(paramObj);
 
                     JSONObject json = new JSONObject();
-                    json.put("contactList",jsonArray);
+                    json.put("contactList", jsonArray);
 
-                    Call<SQLitePojo> call = retrofitAPI.postData(json);
+                    Call<SQLitePojo> call = retrofitAPI.postData(json.toString());
+
+                    Log.d("GBDUTUYDTGIUD", "CALL OBJECT: " + json.toString());
+
                     call.enqueue(new Callback<SQLitePojo>() {
                         @Override
                         public void onResponse(Call<SQLitePojo> call, Response<SQLitePojo> response) {
-                            Toast.makeText(ViewListUser.this, "Success", Toast.LENGTH_SHORT).show();
-                            Log.d("PRABHUDHAN", "onResponse: " + json);
+
+                            if (response.isSuccessful()) {
+                                Log.d("GBDUTUYDTGIUD", "onResponse: " + response.body());
+                                Toast.makeText(ViewListUser.this, "Success", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ViewListUser.this, "Server error", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -100,7 +143,7 @@ public class ViewListUser extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         });
     }
@@ -109,9 +152,9 @@ public class ViewListUser extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            name= intent.getStringExtra("mName");
-            number= intent.getStringExtra("mNumber");
-            email= intent.getStringExtra("mEmail");
+            name = intent.getStringExtra("mName");
+            number = intent.getStringExtra("mNumber");
+            email = intent.getStringExtra("mEmail");
 
         }
     };

@@ -1,13 +1,9 @@
-package com.example.datasync.Pojo;
+package com.example.datasync.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserDataPojo {
-
-    @SerializedName("contactId")
-    @Expose
-    private Integer contactId;
+public class ModelContact {
     @SerializedName("contactName")
     @Expose
     private String contactName;
@@ -18,22 +14,13 @@ public class UserDataPojo {
     @Expose
     private String mobileNo;
 
-    //post data file
-
-    public UserDataPojo(Integer contactId, String contactName, String emailId, String mobileNo) {
-        this.contactId = contactId;
+    public ModelContact(String contactName, String emailId, String mobileNo) {
         this.contactName = contactName;
         this.emailId = emailId;
         this.mobileNo = mobileNo;
     }
 
-    public Integer getContactId() {
-        return contactId;
-    }
 
-    public void setContactId(Integer contactId) {
-        this.contactId = contactId;
-    }
 
     public String getContactName() {
         return contactName;

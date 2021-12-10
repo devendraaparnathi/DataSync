@@ -1,5 +1,6 @@
 package com.example.datasync.Pojo;
 
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,10 +12,6 @@ public class SQLitePojo {
     @Expose
     private List<Contact> contactList = null;
 
-    public SQLitePojo(List<Contact> contactList) {
-        this.contactList = contactList;
-    }
-
     public List<Contact> getContactList() {
         return contactList;
     }
@@ -22,7 +19,6 @@ public class SQLitePojo {
     public void setContactList(List<Contact> contactList) {
         this.contactList = contactList;
     }
-
 
     public class Contact {
 
@@ -35,12 +31,6 @@ public class SQLitePojo {
         @SerializedName("mobileNo")
         @Expose
         private String mobileNo;
-
-        public Contact(String contactName, String emailId, String mobileNo) {
-            this.contactName = contactName;
-            this.emailId = emailId;
-            this.mobileNo = mobileNo;
-        }
 
         public String getContactName() {
             return contactName;
@@ -66,5 +56,4 @@ public class SQLitePojo {
             this.mobileNo = mobileNo;
         }
     }
-
 }
